@@ -19,5 +19,10 @@ class Book {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute($data);
     }
+
+    public function delete($id) {
+        $stmt = $this->conn->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }
 ?>

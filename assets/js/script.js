@@ -1,8 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let bookToDeleteId = null;
   const bookForm = document.getElementById("bookForm");
   const bookModal = new bootstrap.Modal(document.getElementById("bookModal"));
   const bookTableBody = document.getElementById("bookTableBody");
   const bookModalLabel = document.getElementById("bookModalLabel");
+  const deleteModal = new bootstrap.Modal(
+    document.getElementById("deleteModal")
+  );
 
   // Load all books
   function loadBooks() {
@@ -58,5 +62,31 @@ document.addEventListener("DOMContentLoaded", () => {
           alert(response.message || "Error occurred");
         }
       });
+  });
+
+  bookTableBody.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      bookToDeleteId = e.target.dataset.id;
+      deleteModal.show();
+    }
+  });
+
+  document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+    if (bookToDeleteId) {
+      fetch("ajax/delete.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `id=${bookToDeleteId}`,
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.success) {
+            loadBooks();
+            deleteModal.hide(); // Close modal after deletion
+          } else {
+            alert(response.message || "Failed to delete");
+          }
+        });
+    }
   });
 });
