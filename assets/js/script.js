@@ -30,6 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadBooks();
 
+  //Form reset
+  document.querySelector(".btn-success").addEventListener("click", () => {
+    bookModalLabel.textContent = "Add Book";
+    bookForm.reset();
+    bookForm.id.value = ""; // Clear hidden id input
+  });
+
   // Submit add/edit form
   bookForm.addEventListener("submit", (e) => {
     e.preventDefault();
