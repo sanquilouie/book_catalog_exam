@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <td>${book.publisher}</td>
               <td>${book.year_published}</td>
               <td>${book.category}</td>
-              <td>
+              <td style="width: 120px;">
                 <button class="btn btn-sm btn-secondary edit-btn" data-id="${book.id}">EDIT</button>
                 <button class="btn btn-sm btn-secondary delete-btn" data-id="${book.id}">DEL</button>
               </td>
@@ -68,6 +68,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("delete-btn")) {
       bookToDeleteId = e.target.dataset.id;
       deleteModal.show();
+    } else if (e.target.classList.contains("edit-btn")) {
+      const id = e.target.dataset.id;
+      fetch(`ajax/fetch.php?id=${id}`)
+        .then((res) => res.json())
+        .then((book) => {
+          bookModalLabel.textContent = "Edit Book";
+          bookForm.id.value = book.id;
+          bookForm.title.value = book.title;
+          bookForm.isbn.value = book.isbn;
+          bookForm.author.value = book.author;
+          bookForm.publisher.value = book.publisher;
+          bookForm.year_published.value = book.year_published;
+          bookForm.category.value = book.category;
+          bookModal.show();
+        });
     }
   });
 

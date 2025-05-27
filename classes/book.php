@@ -24,5 +24,21 @@ class Book {
         $stmt = $this->conn->prepare("DELETE FROM {$this->table} WHERE id = ?");
         return $stmt->execute([$id]);
     }
+
+    public function update($id, $data) {
+        $sql = "UPDATE {$this->table}
+                SET title = :title, isbn = :isbn, author = :author, publisher = :publisher,
+                    year_published = :year_published, category = :category
+                WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $data['id'] = $id;
+        return $stmt->execute($data);
+    }
+    
+    public function getById($id) {
+        $stmt = $this->conn->prepare("SELECT * FROM {$this->table} WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>
