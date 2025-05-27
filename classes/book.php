@@ -12,5 +12,12 @@ class Book {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function add($data) {
+        $sql = "INSERT INTO {$this->table} (title, isbn, author, publisher, year_published, category)
+                VALUES (:title, :isbn, :author, :publisher, :year_published, :category)";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute($data);
+    }
 }
 ?>

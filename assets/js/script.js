@@ -29,4 +29,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadBooks();
+
+  // Submit add/edit form
+  bookForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(bookForm);
+    const id = formData.get("id");
+    let url = "ajax/add.php";
+    if (id) url = "ajax/edit.php"; // If id exists, it's an edit
+
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.success) {
+          bookModal.hide();
+          loadBooks();
+        } else {
+          alert(response.message || "Error occurred");
+        }
+      });
+  });
 });
